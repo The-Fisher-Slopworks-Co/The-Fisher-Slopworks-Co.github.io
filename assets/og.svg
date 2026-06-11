@@ -40,8 +40,10 @@
         <path d="M19,50 C31,69 55,71 71,52"/>
         <path d="M71,48 L89,37 L81,50 L89,63 L71,52"/>
         <path d="M37,37 C33,44 33,56 37,63"/>
-        <path d="M47,53 C51,48 58,48 62,52 C58,57 51,57 47,53 Z" stroke-width="1.9"/>
-        <path d="M62,52 L67,49 L65,52 L67,55 Z" stroke-width="1.9"/>
+        <g transform="translate(-4,4)">
+          <path d="M47,53 C51,48 58,48 62,52 C58,57 51,57 47,53 Z" stroke-width="1.9"/>
+          <path d="M62,52 L67,49 L65,52 L67,55 Z" stroke-width="1.9" fill="#6df0d6"/>
+        </g>
       </g>
       <circle cx="30" cy="46.5" r="2.4" fill="#6df0d6"/>
     </g>

@@ -12,9 +12,11 @@
     <path d="M71,48 L89,37 L81,50 L89,63 L71,52"/>
     <!-- gill -->
     <path d="M37,37 C33,44 33,56 37,63"/>
-    <!-- the catch: a small fish held within -->
-    <path d="M47,53 C51,48 58,48 62,52 C58,57 51,57 47,53 Z" stroke-width="1.9"/>
-    <path d="M62,52 L67,49 L65,52 L67,55 Z" stroke-width="1.9"/>
+  </g>
+  <!-- the catch: a small fish held within -->
+  <g fill="none" stroke="#eaf1f3" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" transform="translate(-4,4)">
+    <path d="M47,53 C51,48 58,48 62,52 C58,57 51,57 47,53 Z"/>
+    <path d="M62,52 L67,49 L65,52 L67,55 Z" fill="#eaf1f3"/>
   </g>
   <circle cx="30" cy="46.5" r="2.4" fill="#eaf1f3"/>
 </svg>

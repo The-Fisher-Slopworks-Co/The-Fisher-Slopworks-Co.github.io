@@ -230,8 +230,8 @@ section { position: relative; z-index: 1; }
 .btn {
   position: relative; display: inline-flex; align-items: center; gap: .55rem;
   font: 600 .94rem/1 var(--sans); padding: .92rem 1.5rem; border-radius: 999px;
-  cursor: pointer; border: 1px solid transparent;
-  transition: box-shadow .35s, background-color .3s, border-color .3s, color .3s;
+  cursor: pointer; border: 1px solid transparent; will-change: transform;
+  transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s, background-color .3s, border-color .3s, color .3s;
 }
 .btn__arrow { width: 18px; height: 18px; transition: transform .35s; }
 .btn:hover .btn__arrow { transform: translateX(4px); }
@@ -295,7 +295,7 @@ section { position: relative; z-index: 1; }
 /* hero seal */
 .hero__seal {
   position: absolute; right: clamp(-4rem, -2vw, 2rem); top: 50%;
-  width: clamp(280px, 34vw, 520px); aspect-ratio: 1;
+  width: clamp(420px, 51vw, 780px); aspect-ratio: 1;
   transform: translateY(-50%); pointer-events: none;
   display: grid; place-items: center; opacity: .9;
 }
