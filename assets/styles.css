@@ -35,9 +35,8 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* overflow-x is clipped at the root: the hero seal intentionally bleeds past
-   the right edge, and body-level overflow-x alone doesn't stop a horizontal
-   scrollbar in every browser */
+/* overflow-x is clipped at the root: body-level overflow-x alone doesn't
+   stop a stray horizontal scrollbar in every browser */
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; background-color: #050d17; overflow-x: clip; }
 
 body {
@@ -249,12 +248,17 @@ section { position: relative; z-index: 1; }
 /* ============================================================ hero */
 .hero {
   min-height: 100svh; display: grid; align-content: center;
-  padding: 7rem var(--edge) 4rem; position: relative;
+  padding: 7.5rem var(--edge) 4.5rem; position: relative;
 }
-.hero__inner { max-width: var(--maxw); margin: 0 auto; width: 100%; }
+.hero__inner {
+  max-width: var(--maxw); margin: 0 auto; width: 100%;
+  display: grid; grid-template-columns: minmax(0, 7fr) minmax(300px, 5fr);
+  gap: clamp(2.2rem, 4vw, 3.4rem) clamp(2.5rem, 5vw, 5rem);
+  align-items: center;
+}
 .hero__title {
-  font: 600 clamp(2.7rem, 8.2vw, 6.6rem)/0.98 var(--serif);
-  letter-spacing: -0.025em; margin: 1.5rem 0 0; max-width: 16ch;
+  font: 600 clamp(2.7rem, 5vw, 4.8rem)/1.02 var(--serif);
+  letter-spacing: -0.025em; margin: 1.5rem 0 0; max-width: 20ch;
   font-optical-sizing: auto;
   text-shadow: 0 2px 40px rgba(0,0,0,.45);
 }
@@ -275,10 +279,10 @@ section { position: relative; z-index: 1; }
 .hero__cta { margin-top: 2.2rem; display: flex; flex-wrap: wrap; gap: 1rem; }
 
 .soundings {
-  margin-top: clamp(2.8rem, 5vw, 4.2rem);
+  grid-column: 1 / -1; margin-top: clamp(.4rem, 1vw, 1rem);
   display: grid; grid-template-columns: repeat(4, 1fr);
   gap: 1px; background: var(--line); border: 1px solid var(--line);
-  border-radius: 14px; overflow: hidden; max-width: 880px;
+  border-radius: 14px; overflow: hidden;
 }
 .sounding { background: rgba(8, 21, 33, 0.45); padding: 1.2rem 1.3rem; }
 .sounding dt {
@@ -292,32 +296,73 @@ section { position: relative; z-index: 1; }
 .sounding__text { font-size: clamp(1.5rem, 3vw, 2.1rem) !important; letter-spacing: -0.01em; }
 @media (max-width: 720px) { .soundings { grid-template-columns: repeat(2, 1fr); } }
 
-/* hero seal */
-.hero__seal {
-  position: absolute; right: clamp(-4rem, -2vw, 2rem); top: 50%;
-  width: clamp(420px, 51vw, 780px); aspect-ratio: 1;
-  transform: translateY(-50%); pointer-events: none;
-  display: grid; place-items: center; opacity: .9;
+/* hero chart — fig. 01, the maker's mark drawn up as a survey plate */
+.hero__chart {
+  position: relative; width: min(100%, 470px); justify-self: end;
+  filter: drop-shadow(0 36px 70px rgba(0, 0, 0, 0.55));
 }
-.hero__seal-text {
-  position: absolute; inset: 0; width: 100%; height: 100%;
-  fill: var(--haze); font: 600 11px/1 var(--mono); letter-spacing: 3px;
-  animation: spin 60s linear infinite;
+.hero__chart::before {
+  content: ""; position: absolute; inset: 6% -10% -2%; pointer-events: none;
+  background: radial-gradient(55% 45% at 50% 42%, rgba(70, 229, 196, 0.13), transparent 70%);
 }
-.hero__seal-ring {
-  position: absolute; inset: 12%; border-radius: 50%;
-  border: 1px dashed rgba(147, 168, 184, 0.3);
-  animation: spin 90s linear infinite reverse;
+.chartplate {
+  position: relative; width: 100%; height: auto;
+  animation: chart-float 9s ease-in-out infinite;
 }
-.hero__seal-ring--2 { inset: 20%; border-style: solid; border-color: var(--line); animation: none; }
-.hero__fish {
-  width: 46%; height: 46%; color: var(--teal);
-  filter: drop-shadow(0 0 24px rgba(70, 229, 196, 0.55));
-  animation: bob 6s ease-in-out infinite;
+@keyframes chart-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+.cp-sheet { fill: rgba(7, 18, 29, 0.58); stroke: var(--line-2); }
+.cp-frame, .cp-frame line { fill: none; stroke: var(--line-2); }
+.cp-frame--in { stroke: var(--line); }
+.cp-ticks line { stroke: rgba(147, 168, 184, 0.5); }
+.cp-geo { font: 500 8px var(--mono); fill: var(--mist); letter-spacing: .12em; opacity: .8; }
+.cp-h1 { font: 600 11px var(--mono); fill: var(--bone); letter-spacing: .18em; }
+.cp-h2 { font: 500 8px var(--mono); fill: var(--mist); letter-spacing: .26em; }
+.cp-rose { fill: none; stroke: var(--mist); opacity: .65; }
+.cp-snd { font: 500 9px var(--mono); fill: var(--haze); opacity: .4; }
+.cp-contour {
+  fill: none; stroke: rgba(147, 168, 184, 0.16); stroke-dasharray: 5 7;
+  animation: cp-drift 36s linear infinite;
 }
-@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes cp-drift { to { stroke-dashoffset: -288; } }
+
+/* the specimen draws itself in like a draught (pathLength=1 normalizes every dash) */
+.cp-fish { filter: drop-shadow(0 0 18px rgba(70, 229, 196, 0.45)); }
+.cp-d {
+  fill: none; stroke: var(--teal); stroke-width: 2.4;
+  stroke-linecap: round; stroke-linejoin: round;
+  stroke-dasharray: 1; stroke-dashoffset: 1;
+  animation: cp-draw .9s cubic-bezier(.45, 0, .2, 1) forwards;
+}
+.cp-d.d1, .cp-d.d2 { animation-delay: .2s; }
+.cp-d.d3 { animation-delay: .75s; }
+.cp-d.d4 { animation-delay: .95s; }
+.cp-d.d5 { animation-delay: 1.15s; stroke-width: 1.9; }
+.cp-fill { fill: var(--teal); opacity: 0; animation: cp-appear .5s ease forwards 1.45s; }
+@keyframes cp-draw { to { stroke-dashoffset: 0; } }
+@keyframes cp-appear { to { opacity: 1; } }
+.cp-ping {
+  fill: none; stroke: var(--teal); stroke-width: .9; opacity: 0;
+  transform-box: fill-box; transform-origin: center;
+  animation: cp-ping 4.5s ease-out 2.2s infinite;
+}
+@keyframes cp-ping {
+  0% { opacity: .9; transform: scale(.35); }
+  30%, 100% { opacity: 0; transform: scale(2.4); }
+}
+
+.cp-dim line, .cp-dim path { stroke: rgba(230, 173, 99, 0.55); fill: none; }
+.cp-dim circle { fill: rgba(230, 173, 99, 0.8); }
+.cp-note { font: 500 8.5px var(--mono); fill: var(--brass); letter-spacing: .14em; opacity: .9; }
+.cp-t1 { font: 600 10.5px var(--mono); fill: var(--bone); letter-spacing: .1em; }
+.cp-t2 { font: italic 500 11.5px var(--serif); fill: var(--haze); }
+.cp-tb { font: 500 9px var(--mono); fill: var(--mist); letter-spacing: .12em; }
+
 @keyframes bob { 0%,100% { transform: translateY(-2%); } 50% { transform: translateY(4%); } }
-@media (max-width: 1080px) { .hero__seal { opacity: .14; right: 50%; transform: translate(50%, -50%); width: 80vw; } }
+@media (max-width: 1080px) {
+  .hero__inner { grid-template-columns: 1fr; }
+  .hero__chart { justify-self: center; width: min(100%, 420px); margin-top: .6rem; }
+}
 
 .scroll-cue {
   position: absolute; left: var(--edge); bottom: 2rem; display: flex; align-items: center; gap: .8rem;
@@ -605,6 +650,9 @@ button:focus-visible,
    composite while scrolling: the blend-mode grain and backdrop blurs. */
 @media (pointer: coarse) {
   .grain { display: none; }
+  /* the floating svg inside a filtered parent would re-rasterize the
+     drop-shadow every frame; the sheet fill carries the depth instead */
+  .hero__chart { filter: none; }
   .nav.is-stuck {
     -webkit-backdrop-filter: none; backdrop-filter: none;
     background: rgba(8, 22, 35, 0.94);
@@ -621,5 +669,7 @@ button:focus-visible,
   *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
   .js [data-reveal], [data-reveal] { opacity: 1 !important; transform: none !important; }
   .ticker__row { animation: none; }
-  .hero__seal-text, .hero__seal-ring, .hero__fish { animation: none; }
+  .chartplate, .cp-contour, .cp-ping { animation: none; }
+  .cp-d { animation: none; stroke-dashoffset: 0; }
+  .cp-fill { animation: none; opacity: 1; }
 }

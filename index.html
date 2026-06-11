@@ -97,27 +97,118 @@
   <!-- ============ hero ============ -->
   <section class="hero" id="hero">
     <div class="hero__inner">
-      <p class="eyebrow" data-reveal>
-        <span class="eyebrow__dot"></span>
-        Est. 2026 · A free-software foundry
-      </p>
-      <h1 class="hero__title" data-reveal>
-        We make small, sharp tools<br />
-        and let them <span class="ital">swim.</span>
-      </h1>
-      <p class="hero__lede" data-reveal>
-        The Fisher Slopworks Co is a tiny workshop for small, sharp software, and
-        then we let it loose. VPN control planes, AI agents, terminal toys, the odd
-        editor plugin. Every line written by a machine, shipped in the open, free for
-        anyone to use or take apart.
-      </p>
-      <div class="hero__cta" data-reveal>
-        <a class="btn btn--primary" href="#catalog">
-          <span>Browse the catalog</span>
-          <svg viewBox="0 0 24 24" class="btn__arrow"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
-        <a class="btn btn--ghost" href="#toy">Roll the d10 →</a>
+      <div class="hero__copy">
+        <p class="eyebrow" data-reveal>
+          <span class="eyebrow__dot"></span>
+          Est. 2026 · A free-software foundry
+        </p>
+        <h1 class="hero__title" data-reveal>
+          We make small, sharp tools and let them <span class="ital">swim.</span>
+        </h1>
+        <p class="hero__lede" data-reveal>
+          The Fisher Slopworks Co is a tiny workshop for small, sharp software, and
+          then we let it loose. VPN control planes, AI agents, terminal toys, the odd
+          editor plugin. Every line written by a machine, shipped in the open, free for
+          anyone to use or take apart.
+        </p>
+        <div class="hero__cta" data-reveal>
+          <a class="btn btn--primary" href="#catalog">
+            <span>Browse the catalog</span>
+            <svg viewBox="0 0 24 24" class="btn__arrow"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a class="btn btn--ghost" href="#toy">Roll the d10 →</a>
+        </div>
       </div>
+
+      <!-- fig. 01 — the maker's mark, drawn up as a survey chart plate -->
+      <figure class="hero__chart" aria-hidden="true" data-reveal>
+        <svg class="chartplate" viewBox="0 0 460 560">
+          <!-- sheet + frames -->
+          <rect class="cp-sheet" x="1" y="1" width="458" height="558" rx="4" />
+          <rect class="cp-frame" x="16" y="16" width="428" height="528" />
+          <rect class="cp-frame cp-frame--in" x="28" y="28" width="404" height="504" />
+
+          <!-- graticule ticks (1px dashes of a thick stroke) -->
+          <g class="cp-ticks" stroke-width="7" stroke-dasharray="1 51">
+            <line x1="40" y1="31.5" x2="420" y2="31.5" />
+            <line x1="31.5" y1="40" x2="31.5" y2="460" />
+            <line x1="428.5" y1="40" x2="428.5" y2="460" />
+          </g>
+          <g class="cp-geo" text-anchor="middle">
+            <text x="92" y="24">32°W</text>
+            <text x="300" y="24">31°W</text>
+            <text transform="rotate(-90 22.5 200)" x="22.5" y="200">44°N</text>
+            <text transform="rotate(-90 22.5 380)" x="22.5" y="380">43°N</text>
+          </g>
+
+          <!-- chart head + compass -->
+          <text class="cp-h1" x="44" y="60">CHART № 02</text>
+          <text class="cp-h2" x="44" y="76">SOUNDINGS IN FATHOMS</text>
+          <g class="cp-rose" transform="translate(398,74)">
+            <circle r="15" />
+            <path d="M0,15 L0,-9 M-3.5,-3 L0,-10 L3.5,-3" />
+          </g>
+          <text class="cp-h2" x="398" y="51" text-anchor="middle">N</text>
+
+          <!-- depth contours -->
+          <path class="cp-contour" d="M44,152 C120,132 210,168 300,150 C352,140 398,154 416,146" />
+          <path class="cp-contour" d="M44,390 C132,412 224,372 308,396 C356,409 394,392 416,398" />
+
+          <!-- scattered soundings -->
+          <g class="cp-snd">
+            <text x="66" y="162">9</text>
+            <text x="206" y="128">6</text>
+            <text x="392" y="134">12</text>
+            <text x="64" y="338">47</text>
+            <text x="130" y="430">31</text>
+            <text x="302" y="442">58</text>
+            <text x="406" y="330">23</text>
+          </g>
+
+          <!-- the specimen, drawn in like a draught -->
+          <g class="cp-fish" transform="translate(95,118) scale(2.7)">
+            <path class="cp-d d1" pathLength="1" d="M19,50 C31,31 55,29 71,48" />
+            <path class="cp-d d2" pathLength="1" d="M19,50 C31,69 55,71 71,52" />
+            <path class="cp-d d3" pathLength="1" d="M71,48 L89,37 L81,50 L89,63 L71,52" />
+            <path class="cp-d d4" pathLength="1" d="M37,37 C33,44 33,56 37,63" />
+            <g transform="translate(-4,4)">
+              <path class="cp-d d5" pathLength="1" d="M47,53 C51,48 58,48 62,52 C58,57 51,57 47,53 Z" />
+              <path class="cp-fill" d="M62,52 L67,49 L65,52 L67,55 Z" />
+            </g>
+            <circle class="cp-fill" cx="30" cy="46.5" r="2.4" />
+            <circle class="cp-ping" cx="30" cy="46.5" r="5" />
+          </g>
+
+          <!-- dimension: nose to tail -->
+          <g class="cp-dim">
+            <line x1="146.3" y1="300" x2="146.3" y2="331" />
+            <line x1="335.3" y1="300" x2="335.3" y2="331" />
+            <path d="M146.3,323 H335.3" />
+            <path d="M154,319 L146.8,323 L154,327" />
+            <path d="M327.6,319 L334.8,323 L327.6,327" />
+          </g>
+          <text class="cp-note" x="240.8" y="314" text-anchor="middle">≈ ONE HANDSPAN</text>
+
+          <!-- leader to the smaller fish -->
+          <g class="cp-dim">
+            <circle cx="265" cy="253" r="1.6" />
+            <path d="M265,253 L314,196 H318" />
+          </g>
+          <text class="cp-note" x="322" y="191">CARGO, LIVE —</text>
+          <text class="cp-note" x="322" y="203">ONE SMALLER FISH</text>
+
+          <!-- title block -->
+          <g class="cp-frame">
+            <line x1="28" y1="466" x2="432" y2="466" />
+            <line x1="256" y1="466" x2="256" y2="532" />
+          </g>
+          <text class="cp-t1" x="44" y="494">FIG. 01 — MAKER'S MARK</text>
+          <text class="cp-t2" x="44" y="515">Pisces ferramentum · the tool-fish</text>
+          <text class="cp-tb" x="270" y="488">SCALE 1:1 · SHEET 1/1</text>
+          <text class="cp-tb" x="270" y="506">DRAWN BY MACHINE</text>
+          <text class="cp-tb" x="270" y="524">EST. MMXXVI</text>
+        </svg>
+      </figure>
 
       <dl class="soundings" data-reveal>
         <div class="sounding">
@@ -134,21 +225,9 @@
         </div>
         <div class="sounding">
           <dt>Trackers, ads, analytics</dt>
-          <dd><span class="count" data-count="0">0</span></dd>
+          <dd><span class="count" data-count="0" data-count-from="1000">0</span></dd>
         </div>
       </dl>
-    </div>
-
-    <div class="hero__seal" aria-hidden="true">
-      <svg class="hero__seal-text" viewBox="0 0 200 200">
-        <defs>
-          <path id="ring" d="M100,100 m-80,0 a80,80 0 1,1 160,0 a80,80 0 1,1 -160,0" />
-        </defs>
-        <text><textPath href="#ring" xlink:href="#ring" startOffset="0">· THE · FISHER · SLOPWORKS · CO · EST · MMXXVI &#160;</textPath></text>
-      </svg>
-      <div class="hero__seal-ring"></div>
-      <div class="hero__seal-ring hero__seal-ring--2"></div>
-      <svg class="hero__fish" viewBox="0 0 100 100"><use href="#fish" xlink:href="#fish" /></svg>
     </div>
 
     <a class="scroll-cue" href="#ethos" aria-label="Scroll to the workshop">

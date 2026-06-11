@@ -212,12 +212,13 @@
   const counts = $$(".count");
   const runCount = (el) => {
     const to = parseFloat(el.dataset.count) || 0;
-    if (reduce || to === 0) { el.textContent = String(to); return; }
+    const from = parseFloat(el.dataset.countFrom) || 0;
+    if (reduce || to === from) { el.textContent = String(to); return; }
     const dur = 1400; const t0 = performance.now();
     const step = (now) => {
       const p = clamp((now - t0) / dur, 0, 1);
       const e = 1 - Math.pow(1 - p, 3);
-      el.textContent = String(Math.round(to * e));
+      el.textContent = String(Math.round(from + (to - from) * e));
       if (p < 1) requestAnimationFrame(step);
     };
     requestAnimationFrame(step);
