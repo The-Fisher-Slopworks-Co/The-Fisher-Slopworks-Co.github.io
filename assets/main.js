@@ -4,6 +4,7 @@
   "use strict";
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  const coarse = window.matchMedia("(pointer: coarse)").matches;
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -18,13 +19,16 @@
     const TEAL = [70, 229, 196], BRASS = [230, 173, 99];
 
     function resize() {
-      dpr = Math.min(window.devicePixelRatio || 1, 1.75);
+      // touch GPUs: render at 1x and with far fewer motes
+      dpr = Math.min(window.devicePixelRatio || 1, coarse ? 1 : 1.75);
       W = window.innerWidth;
       H = window.innerHeight;
       canvas.width = Math.floor(W * dpr);
       canvas.height = Math.floor(H * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      const target = clamp(Math.floor((W * H) / 11000), 40, 170);
+      const target = coarse
+        ? clamp(Math.floor((W * H) / 24000), 24, 64)
+        : clamp(Math.floor((W * H) / 11000), 40, 170);
       motes = [];
       for (let i = 0; i < target; i++) motes.push(spawn());
     }
@@ -102,21 +106,32 @@
     window.addEventListener("resize", () => {
       clearTimeout(ro); ro = setTimeout(() => { resize(); if (reduce) staticFrame(); }, 160);
     });
+    const start = () => { if (!raf) { last = performance.now(); raf = requestAnimationFrame(frame); } };
+    const stop = () => { cancelAnimationFrame(raf); raf = 0; };
     resize();
     if (reduce) { staticFrame(); }
     else {
-      const start = () => { if (!raf) { last = performance.now(); raf = requestAnimationFrame(frame); } };
-      const stop = () => { cancelAnimationFrame(raf); raf = 0; };
       document.addEventListener("visibilitychange", () => (document.hidden ? stop() : start()));
       start();
     }
-    // fade the sea as the page descends
+    // fade the sea as the page descends; on touch devices it fades out fully
+    // and the animation loop stops once it's invisible
     const fade = () => {
-      const o = clamp(1 - window.scrollY / (window.innerHeight * 1.3), 0.34, 1);
+      const o = clamp(1 - window.scrollY / (window.innerHeight * 1.3), coarse ? 0 : 0.34, 1);
       canvas.style.opacity = o.toFixed(3);
+      if (!reduce && coarse) {
+        if (o === 0) stop();
+        else if (!document.hidden) start();
+      }
     };
     fade();
-    window.addEventListener("scroll", fade, { passive: true });
+    let fadePending = false;
+    window.addEventListener("scroll", () => {
+      if (!fadePending) {
+        fadePending = true;
+        requestAnimationFrame(() => { fadePending = false; fade(); });
+      }
+    }, { passive: true });
   }
 
   /* ---------------------------------------------------- custom cursor */
@@ -127,7 +142,7 @@
       tx = e.clientX; ty = e.clientY;
       if (!on) { on = true; cursor.classList.add("is-active"); }
     });
-    const hot = "a, button, .card, [data-magnetic], .chip";
+    const hot = "a, button, .card, .chip";
     document.addEventListener("pointerover", (e) => {
       if (e.target.closest(hot)) cursor.classList.add("is-hot");
     });
@@ -175,21 +190,21 @@
 
   /* ---------------------------------------------------- reveal + stagger */
   const reveals = $$("[data-reveal]");
-  const groups = new Map();
-  reveals.forEach((el) => {
-    const p = el.parentElement;
-    if (!groups.has(p)) groups.set(p, 0);
-    const i = groups.get(p); groups.set(p, i + 1);
-    el.style.setProperty("--rd", Math.min(i, 8) * 70 + "ms");
-  });
   if (reduce || !("IntersectionObserver" in window)) {
     reveals.forEach((el) => el.classList.add("is-in"));
   } else {
+    // stagger per batch of elements entering together, not per DOM group —
+    // an element arriving on its own animates with zero delay
     const io = new IntersectionObserver((ents) => {
-      ents.forEach((e) => {
-        if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); }
+      const batch = ents.filter((e) => e.isIntersecting);
+      batch.forEach((e, i) => {
+        e.target.style.setProperty("--rd", Math.min(i, 3) * 45 + "ms");
+        e.target.classList.add("is-in");
+        io.unobserve(e.target);
       });
-    }, { threshold: 0.16, rootMargin: "0px 0px -8% 0px" });
+      // start revealing well below the fold so fast scrolling
+      // never outruns the animation into a blank screen
+    }, { threshold: 0, rootMargin: "0px 0px 45% 0px" });
     reveals.forEach((el) => io.observe(el));
   }
 
@@ -262,19 +277,6 @@
         link.style.removeProperty("--mx");
         link.style.removeProperty("--my");
       });
-    });
-  }
-
-  /* ---------------------------------------------------- magnetic buttons */
-  if (fine && !reduce) {
-    $$("[data-magnetic]").forEach((btn) => {
-      btn.addEventListener("pointermove", (e) => {
-        const r = btn.getBoundingClientRect();
-        const x = e.clientX - (r.left + r.width / 2);
-        const y = e.clientY - (r.top + r.height / 2);
-        btn.style.transform = `translate(${(x * 0.22).toFixed(1)}px, ${(y * 0.32).toFixed(1)}px)`;
-      });
-      btn.addEventListener("pointerleave", () => { btn.style.transform = ""; });
     });
   }
 

@@ -35,18 +35,28 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; background-color: #050d17; }
+/* overflow-x is clipped at the root: the hero seal intentionally bleeds past
+   the right edge, and body-level overflow-x alone doesn't stop a horizontal
+   scrollbar in every browser */
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; background-color: #050d17; overflow-x: clip; }
 
 body {
   font-family: var(--sans);
   color: var(--bone);
-  background:
-    radial-gradient(120% 80% at 50% -10%, #103049 0%, var(--ink) 38%, var(--abyss) 100%) fixed;
+  background: var(--abyss);
   line-height: 1.55;
   overflow-x: hidden;
   letter-spacing: 0.01em;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+/* the page-wide gradient lives on a fixed layer, not on body with
+   background-attachment: fixed — that mode forces a full-page repaint
+   on every scroll frame in mobile browsers */
+body::before {
+  content: ""; position: fixed; inset: 0; z-index: -4; pointer-events: none;
+  background: radial-gradient(120% 80% at 50% -10%, #103049 0%, var(--ink) 38%, var(--abyss) 100%);
 }
 
 ::selection { background: rgba(70, 229, 196, 0.28); color: #fff; }
@@ -145,7 +155,7 @@ img, svg { display: block; max-width: 100%; }
   position: fixed; top: 0; left: 0; right: 0; z-index: 50;
   display: flex; align-items: center; justify-content: space-between;
   padding: clamp(.85rem, 1.6vw, 1.4rem) var(--edge);
-  transition: padding .35s, background-color .35s, backdrop-filter .35s, border-color .35s;
+  transition: padding .35s, background-color .35s, border-color .35s;
   border-bottom: 1px solid transparent;
 }
 .nav.is-stuck {
@@ -220,8 +230,8 @@ section { position: relative; z-index: 1; }
 .btn {
   position: relative; display: inline-flex; align-items: center; gap: .55rem;
   font: 600 .94rem/1 var(--sans); padding: .92rem 1.5rem; border-radius: 999px;
-  cursor: pointer; border: 1px solid transparent; will-change: transform;
-  transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s, background-color .3s, border-color .3s, color .3s;
+  cursor: pointer; border: 1px solid transparent;
+  transition: box-shadow .35s, background-color .3s, border-color .3s, color .3s;
 }
 .btn__arrow { width: 18px; height: 18px; transition: transform .35s; }
 .btn:hover .btn__arrow { transform: translateX(4px); }
@@ -571,8 +581,8 @@ section { position: relative; z-index: 1; }
    Only hide content once JS is confirmed available (html.js, set before paint),
    so a no-JS visitor — or a crawler — always sees the full page. */
 .js [data-reveal] {
-  opacity: 0; transform: translateY(22px);
-  transition: opacity .8s cubic-bezier(.2,.8,.2,1), transform .8s cubic-bezier(.2,.8,.2,1);
+  opacity: 0; transform: translateY(14px);
+  transition: opacity .45s cubic-bezier(.2,.8,.2,1), transform .45s cubic-bezier(.2,.8,.2,1);
   transition-delay: var(--rd, 0ms);
 }
 .js [data-reveal].is-in { opacity: 1; transform: none; }
@@ -589,6 +599,21 @@ button:focus-visible,
   outline-offset: 3px;
 }
 .card:focus-within .card__link { border-color: rgba(70, 229, 196, 0.45); }
+
+/* ============================================================ mobile compositing budget
+   Touch devices get the same look minus the layers that are expensive to
+   composite while scrolling: the blend-mode grain and backdrop blurs. */
+@media (pointer: coarse) {
+  .grain { display: none; }
+  .nav.is-stuck {
+    -webkit-backdrop-filter: none; backdrop-filter: none;
+    background: rgba(8, 22, 35, 0.94);
+  }
+  .pillar {
+    -webkit-backdrop-filter: none; backdrop-filter: none;
+    background: rgba(13, 36, 56, 0.8);
+  }
+}
 
 /* ============================================================ reduced motion */
 @media (prefers-reduced-motion: reduce) {
