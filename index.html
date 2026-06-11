@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<!--
+  SPDX-FileCopyrightText: 2026 The Fisher Slopworks Co
+  SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- mark JS available before first paint, so reveal animations only hide content when JS can restore it -->
+<script>document.documentElement.classList.add("js");</script>
+<title>The Fisher Slopworks Co — small, focused tools, built in the open</title>
+<meta name="description" content="A small free-software foundry. We make small, sharp tools and experiments — VPN control planes, AI agents, terminal toys, editor extensions — all AGPL-3.0-or-later and REUSE-compliant." />
+<meta name="theme-color" content="#0a1a2b" />
+<link rel="canonical" href="https://slopworks.org/" />
+
+<!-- Open Graph / social -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://slopworks.org/" />
+<meta property="og:site_name" content="The Fisher Slopworks Co" />
+<meta property="og:title" content="The Fisher Slopworks Co" />
+<meta property="og:description" content="A small free-software foundry — small, sharp tools and experiments, built in the open." />
+<meta property="og:image" content="https://slopworks.org/assets/og.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="The Fisher Slopworks Co — a free-software foundry, with a fish maker's mark." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="The Fisher Slopworks Co" />
+<meta name="twitter:description" content="Small, sharp tools and experiments, built in the open." />
+<meta name="twitter:image" content="https://slopworks.org/assets/og.png" />
+<meta name="twitter:image:alt" content="The Fisher Slopworks Co — a free-software foundry, with a fish maker's mark." />
+
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="assets/favicon.svg" />
+<link rel="mask-icon" href="assets/favicon.svg" color="#46e5c4" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<!-- load fonts without blocking render; characterful system fallbacks hold the layout until they arrive -->
+<link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&display=swap" />
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&display=swap" /></noscript>
+
+<link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+
+<!-- ============ reusable maker's mark (fish) ============ -->
+<svg width="0" height="0" aria-hidden="true" style="position:absolute">
+  <symbol id="fish" viewBox="0 0 100 100">
+    <g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M19,50 C31,31 55,29 71,48" />
+      <path d="M19,50 C31,69 55,71 71,52" />
+      <path d="M71,48 L89,37 L81,50 L89,63 L71,52" />
+      <path d="M37,37 C33,44 33,56 37,63" />
+      <path d="M47,53 C51,48 58,48 62,52 C58,57 51,57 47,53 Z" stroke-width="1.9" />
+      <path d="M62,52 L67,49 L65,52 L67,55 Z" stroke-width="1.9" />
+    </g>
+    <circle cx="30" cy="46.5" r="2.4" fill="currentColor" stroke="none" />
+  </symbol>
+</svg>
+
+<!-- ============ atmosphere layers ============ -->
+<canvas id="sea" aria-hidden="true"></canvas>
+<div class="chart-grid" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+<div class="vignette" aria-hidden="true"></div>
+<div class="cursor" aria-hidden="true" data-cursor></div>
+
+<a class="skip-link" href="#catalog">Skip to the catalog</a>
+
+<!-- ============ depth gauge ============ -->
+<aside class="gauge" aria-hidden="true" data-gauge>
+  <span class="gauge__cap">0 m</span>
+  <div class="gauge__rail"><span class="gauge__bead" data-gauge-bead></span></div>
+  <span class="gauge__read" data-gauge-read>0 m</span>
+  <span class="gauge__zone" data-gauge-zone>SURFACE</span>
+</aside>
+
+<!-- ============ nav ============ -->
+<header class="nav" data-nav>
+  <a class="nav__brand" href="#top" aria-label="The Fisher Slopworks Co — home">
+    <span class="nav__seal"><svg class="seal-svg"><use href="#fish" xlink:href="#fish" /></svg></span>
+    <span class="nav__word"><b>Fisher Slopworks</b><i>Co.</i></span>
+  </a>
+  <nav class="nav__links" aria-label="Primary">
+    <a href="#catalog">Catalog</a>
+    <a href="#toy">The d10</a>
+    <a href="#standard">Standard</a>
+    <a class="nav__cta" href="https://github.com/The-Fisher-Slopworks-Co" target="_blank" rel="noopener">GitHub ↗</a>
+  </nav>
+</header>
+
+<main id="top">
+
+  <!-- ============ hero ============ -->
+  <section class="hero" id="hero">
+    <div class="hero__inner">
+      <p class="eyebrow" data-reveal>
+        <span class="eyebrow__dot"></span>
+        Est. 2026 · A free-software foundry
+      </p>
+      <h1 class="hero__title" data-reveal>
+        We make small, sharp tools<br />
+        and let them <span class="ital">swim.</span>
+      </h1>
+      <p class="hero__lede" data-reveal>
+        The Fisher Slopworks Co is a tiny workshop for small, focused software —
+        VPN control planes, AI agents, terminal toys, editor extensions. Every
+        line machine-written, shipped in the open, and every one of them free software.
+      </p>
+      <div class="hero__cta" data-reveal>
+        <a class="btn btn--primary" href="#catalog" data-magnetic>
+          <span>Browse the catalog</span>
+          <svg viewBox="0 0 24 24" class="btn__arrow"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a class="btn btn--ghost" href="#toy">Roll the d10 →</a>
+      </div>
+
+      <dl class="soundings" data-reveal>
+        <div class="sounding">
+          <dt>Public repositories</dt>
+          <dd><span class="count" data-count="12">0</span></dd>
+        </div>
+        <div class="sounding">
+          <dt>Languages shipped</dt>
+          <dd><span class="count" data-count="6">0</span></dd>
+        </div>
+        <div class="sounding">
+          <dt>Software license</dt>
+          <dd class="sounding__text">AGPL&#8209;3.0</dd>
+        </div>
+        <div class="sounding">
+          <dt>Trackers, ads, analytics</dt>
+          <dd><span class="count" data-count="0">0</span></dd>
+        </div>
+      </dl>
+    </div>
+
+    <div class="hero__seal" aria-hidden="true">
+      <svg class="hero__seal-text" viewBox="0 0 200 200">
+        <defs>
+          <path id="ring" d="M100,100 m-80,0 a80,80 0 1,1 160,0 a80,80 0 1,1 -160,0" />
+        </defs>
+        <text><textPath href="#ring" xlink:href="#ring" startOffset="0">· THE · FISHER · SLOPWORKS · CO · EST · MMXXVI &#160;</textPath></text>
+      </svg>
+      <div class="hero__seal-ring"></div>
+      <div class="hero__seal-ring hero__seal-ring--2"></div>
+      <svg class="hero__fish" viewBox="0 0 100 100"><use href="#fish" xlink:href="#fish" /></svg>
+    </div>
+
+    <a class="scroll-cue" href="#ethos" aria-label="Scroll to the workshop">
+      <span>Sounding the depths</span>
+      <span class="scroll-cue__line"></span>
+    </a>
+  </section>
+
+  <!-- ============ ethos ============ -->
+  <section class="ethos" id="ethos">
+    <div class="band-head" data-reveal>
+      <span class="band-kicker"><span class="band-kicker__no">01</span> From the workshop</span>
+      <h2 class="band-title">A small bench, a sharp set of tools.</h2>
+    </div>
+    <div class="ethos__grid">
+      <article class="pillar" data-reveal>
+        <span class="pillar__no">i.</span>
+        <h3>Small &amp; focused</h3>
+        <p>Each repo does one thing and tries to do it cleanly — a die that rolls,
+          a bot you can watch, a panel that tames a fleet. No platforms, no suites.
+          Tools you can hold in one hand.</p>
+      </article>
+      <article class="pillar" data-reveal>
+        <span class="pillar__no">ii.</span>
+        <h3>Free &amp; in the open</h3>
+        <p>Every project is <b>AGPL-3.0-or-later</b> and
+          <a href="https://reuse.software/" target="_blank" rel="noopener">REUSE</a>-compliant,
+          with a Code of Conduct, a security policy, and CI that won't let a stray
+          license through. Honest provenance, all the way down.</p>
+      </article>
+      <article class="pillar" data-reveal>
+        <span class="pillar__no">iii.</span>
+        <h3>Machine-made</h3>
+        <p>Not one line here was typed by a human — every project is AI-generated,
+          and we say so on the tin. The name's a wink at the &ldquo;slop&rdquo;; the
+          standard around it isn't. Tested, reviewed, and licensed before it ships.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ catalog ============ -->
+  <section class="catalog" id="catalog">
+    <div class="band-head" data-reveal>
+      <span class="band-kicker"><span class="band-kicker__no">02</span> The catalog</span>
+      <h2 class="band-title">Everything we&#8217;ve hauled up.</h2>
+      <p class="band-sub">Eleven tools across six languages. Sort the haul by trade.</p>
+    </div>
+
+    <div class="filters" data-filters role="group" aria-label="Filter the catalog">
+      <button class="chip is-active" type="button" data-filter="all" aria-pressed="true" aria-controls="catalog-grid">All <span>11</span></button>
+      <button class="chip" type="button" data-filter="infra" aria-pressed="false" aria-controls="catalog-grid">Infrastructure <span>4</span></button>
+      <button class="chip" type="button" data-filter="music" aria-pressed="false" aria-controls="catalog-grid">Music &amp; lyrics <span>3</span></button>
+      <button class="chip" type="button" data-filter="editor" aria-pressed="false" aria-controls="catalog-grid">Editor tools <span>2</span></button>
+      <button class="chip" type="button" data-filter="toy" aria-pressed="false" aria-controls="catalog-grid">Web toys <span>1</span></button>
+      <button class="chip" type="button" data-filter="foundations" aria-pressed="false" aria-controls="catalog-grid">Foundations <span>1</span></button>
+    </div>
+
+    <ul class="grid" id="catalog-grid" data-grid>
+
+      <li class="card" data-cat="infra" data-lang="TypeScript" data-reveal>
+        <a class="card__link" href="https://github.com/The-Fisher-Slopworks-Co/xfleet" target="_blank" rel="noopener">
+          <header class="card__top">
+            <span class="card__lang"><i class="dot" style="--c:#4fb6e8"></i>TypeScript</span>
+            <span class="card__stars">★ 2</span>
+          </header>
+          <h3 class="card__name">xfleet</h3>
+          <p class="card__tag">Fleet control for self-hosted VPN.</p>
+          <p class="card__blurb">An admin panel that sits in front of 3X-UI. Add a user once and they
+            appear on every server with a share link ready to send — self-hosting a VPN for a few people
+            without it feeling like a job.</p>
+          <footer class="card__meta">
+            <span>Bun</span><span>PostgreSQL</span><span>React</span><span>Xray / VLESS</span>
+          </footer>
+          <span class="card__go">View repository ↗</span>
+        </a>
+      </li>
+
+      <li class="card" data-cat="infra" data-lang="TypeScript" data-reveal>
+        <a class="card__link" href="https://github.com/The-Fisher-Slopworks-Co/kaban_ops" target="_blank" rel="noopener">
+          <header class="card__top">
+            <span class="card__lang"><i class="dot" style="--c:#4fb6e8"></i>TypeScript</span>
+            <span class="card__badge">In drydock</span>
+          </header>
+          <h3 class="card__name">kaban_ops</h3>
+          <p class="card__tag">A kanban board that writes the code.</p>
+          <p class="card__blurb">A local AI orchestrator dressed as a kanban board. Drop a task in a column;
+            an agent picks it up inside an isolated git worktree, pushes, and a second agent reviews the
+            diff before it ever reaches you.</p>
+          <footer class="card__meta">
+            <span>Bun</span><span>Hono</span><span>Claude Agent SDK</span><span>SQLite</span>
+          </footer>
+          <span class="card__go">View repository ↗</span>
+        </a>
+      </li>
+
+      <li class="card" data-cat="infra" data-lang="TypeScript" data-reveal>
+        <a class="card__link" href="https://github.com/The-Fisher-Slopworks-Co/any_talker" target="_blank" rel="noopener">
+          <header class="card__top">
+            <span class="card__lang"><i class="dot" style="--c:#4fb6e8"></i>TypeScript</span>
+            <span class="card__stars">★ 1</span>
+          </header>
+          <h3 class="card__name">any_talker</h3>
+          <p class="card__tag">An AI Telegram bot you can watch.</p>
+          <p class="card__blurb">A Telegram bot wired to OpenRouter — tool-calling, per-user rate limits,
+            bring-your-own-key, and a full Prometheus + VictoriaMetrics stack so you can see every token
+            it spends.</p>
+          <footer class="card__meta">
+            <span>grammY</span><span>Bun</span><span>KeyDB</span><span>OpenRouter</span>
+          </footer>
+          <span class="card__go">View repository ↗</span>
+        </a>
+      </li>
+
+      <li class="card" data-cat="infra" data-lang="C" data-reveal>
+        <a class="card__link" href="https://github.com/The-Fisher-Slopworks-Co/co2ppm" target="_blank" rel="noopener">
+          <header class="card__top">
+            <span class="card__lang"><i class="dot" style="--c:#9aa7b4"></i>C</span>
+            <span class="card__stars">★ 1</span>
+          </header>
+          <h3 class="card__name">co2ppm</h3>
+          <p class="card__tag">Breathe-easy metrics for an ESP32.</p>
+          <p class="card__blurb">Firmware that reads CO₂ and temperature off a ZyAura ZG-01 and serves
+            it as Prometheus metrics — captive-portal WiFi setup, over-the-air updates with automatic
+            rollback, and a status LED you can read across the room.</p>
+          <footer class="card__meta">
+            <span>ESP-IDF</span><span>Prometheus</span><span>OTA</span>
+          </footer>
+          <span class="card__go">View repository ↗</span>
+        </a>
+      </li>
+
+      <li class="card card--feature" data-cat="toy" data-lang="TypeScript" data-reveal>
+        <a class="card__link" href="https://github.com/The-Fisher-Slopworks-Co/d10" target="_blank" rel="noopener">
+          <header class="card__top">
+            <span class="card__lang"><i class="dot" style="--c:#4fb6e8"></i>TypeScript</span>
+            <span class="card__badge card__badge--live"><i></i>Live</span>
+          </header>
+          <h3 class="card__name">d10</h3>
+          <p class="card__tag">Roll one ten-sided die — beautifully.</p>
+          <p class="card__blurb">A real pentagonal trapezohedron simulated as a rigid body on a
+            raw canvas. Grab it, fling it, watch it tumble and settle. No 3D engine, no physics
+            library, and provably fair — renderer and physics written from scratch.</p>
+          <footer class="card__meta">
+            <span>Bun</span><span>Canvas</span><span>Zero-dependency physics</span>
+          </footer>
+          <span class="card__go">View repository ↗</span>
+        </a>
+      </li>
+
+      <li class="card" data-cat="music" data-lang="Rust" data-reveal>
+        <a class="card__link" href="https://github.com/The-Fisher-Slopworks-Co/rstlrx" target="_blank" rel="noopener">
+          <header class="card__top">
+            <span class="card__lang"><i class="dot" style="--c:#e0a55a"></i>Rust</span>
+            <span class="card__stars">★ 2</span>
+          </header>
+          <h3 class="card__name">rstlrx</h3>
+          <p class="card__tag">Blazingly fast terminal lyrics. <span class="wink">/* straight-faced */</span></p>
+          <p class="card__blurb">A Spotify lyrics viewer for your terminal, ported to Rust — synced scroll,
+            queue merge, and CJK romanization (pinyin, romaji, Korean) for when you want to sing along but
+            can't read the characters.</p>
+          <footer class="card__meta">
+            <span>Rust</span><span>Spotify</span><span>Romanization</span>
+          </footer>
+          <span class="card__go">View repository ↗</span>
+        </a>
+      </li>
+
+      <li class="card" data-cat="music" data-lang="TypeScript" data-reveal>
+        <a class="card__link" href="https://github.com/The-Fisher-Slopworks-Co/lrcgen" target="_blank" rel="noopener">
+          <header class="card__top">
+            <span class="card__lang"><i class="dot" style="--c:#4fb6e8"></i>TypeScript</span>
+          </header>
+          <h3 class="card__name">lrcgen</h3>
+          <p class="card__tag">Make LRC files by tapping along.</p>
+          <p class="card__blurb">A terminal tool for timing lyrics: play a song, tap the spacebar on each
+            line, get timestamps. Fix what's off, save. A clean port/adapter design with swappable audio,
+            lyric, and publisher backends.</p>
+          <footer class="card__meta">
+            <span>Bun</span><span>TUI</span><span>ffmpeg</span><span>LRCLIB</span>
+          </footer>
+          <span class="card__go">View repository ↗</span>
+        </a>
+      </li>
+
+      <li class="card" data-cat="music" data-lang="Lua" data-reveal>
+        <a class="card__link" href="https://github.com/The-Fisher-Slopworks-Co/sptlrx-cc" target="_blank" rel="noopener">
+          <header class="card__top">
+            <span class="card__lang"><i class="dot" style="--c:#7e8ff0"></i>Lua</span>
+            <span class="card__stars">★ 4</span>
+          </header>
+          <h3 class="card__name">sptlrx-cc</h3>
+          <p class="card__tag">Karaoke lyrics — inside Minecraft.</p>
+          <p class="card__blurb">Synced Spotify lyrics that scroll on a CC:Tweaked computer. It works out
+            what's playing, pulls the words from LRCLib, and lights up the current line in time with the
+            music. Looks great on a wall of monitors, too.</p>
+          <footer class="card__meta">
+            <span>Lua</span><span>CC:Tweaked</span><span>Spotify</span>
+          </footer>
+          <span class="card__go">View repository ↗</span>
+        </a>
+      </li>
+
+      <li class="card" data-cat="editor" data-lang="JavaScript" data-reveal>
+        <a class="card__link" href="https://github.com/The-Fisher-Slopworks-Co/ignore-and-exclude" target="_blank" rel="noopener">
+          <header class="card__top">
+            <span class="card__lang"><i class="dot" style="--c:#e8c15a"></i>JavaScript</span>
+          </header>
+          <h3 class="card__name">ignore&#8202;&amp;&#8202;exclude</h3>
+          <p class="card__tag">One click to ignore a file.</p>
+          <p class="card__blurb">A tiny VS Code extension: right-click to add a file to <code>.gitignore</code>
+            (shared) or <code>.git/info/exclude</code> (just you). Root-anchored, exact-match patterns with
+            metacharacters escaped — it never catches the wrong file.</p>
+          <footer class="card__meta">
+            <span>VS Code</span><span>TypeScript</span>
+          </footer>
+          <span class="card__go">View repository ↗</span>
+        </a>
+      </li>
+
+      <li class="card" data-cat="editor" data-lang="JavaScript" data-reveal>
+        <a class="card__link" href="https://github.com/The-Fisher-Slopworks-Co/stamp" target="_blank" rel="noopener">
+          <header class="card__top">
+            <span class="card__lang"><i class="dot" style="--c:#e8c15a"></i>JavaScript</span>
+          </header>
+          <h3 class="card__name">stamp</h3>
+          <p class="card__tag">A color per project window.</p>
+          <p class="card__blurb">Gives every project its own status-bar color, so you always know which
+            window is which. It picks a readable text color by WCAG contrast and re-derives the shade for
+            light or dark themes automatically.</p>
+          <footer class="card__meta">
+            <span>VS Code</span><span>WCAG</span><span>Theming</span>
+          </footer>
+          <span class="card__go">View repository ↗</span>
+        </a>
+      </li>
+
+      <li class="card" data-cat="foundations" data-lang="Shell" data-reveal>
+        <a class="card__link" href="https://github.com/The-Fisher-Slopworks-Co/template" target="_blank" rel="noopener">
+          <header class="card__top">
+            <span class="card__lang"><i class="dot" style="--c:#6fbf8a"></i>Shell</span>
+          </header>
+          <h3 class="card__name">template</h3>
+          <p class="card__tag">Every project starts here.</p>
+          <p class="card__blurb">The repository each new tool is cut from — AGPL-3.0-or-later,
+            REUSE-compliant, with the Code of Conduct, security policy, and CI wired in from the first
+            commit. One script renames it and gets out of the way.</p>
+          <footer class="card__meta">
+            <span>AGPL</span><span>REUSE</span><span>CI</span>
+          </footer>
+          <span class="card__go">View repository ↗</span>
+        </a>
+      </li>
+
+    </ul>
+  </section>
+
+  <!-- ============ featured: d10 toy ============ -->
+  <section class="toy" id="toy">
+    <div class="toy__copy" data-reveal>
+      <span class="band-kicker"><span class="band-kicker__no">03</span> From the bench · live</span>
+      <h2 class="band-title">Throw a die that obeys real physics.</h2>
+      <p>No result is decided up front. The die starts from a random orientation and
+        tumbles on an actual pentagonal trapezohedron — true inertia tensor, gravity,
+        impulse collisions, friction — until it settles on whatever face lands up. The
+        renderer and the engine are written from scratch: no three.js, no physics
+        library, no runtime dependencies.</p>
+      <p class="toy__note">Grab it and fling it, or press <kbd>Space</kbd>. It's running live in the porthole, right now.</p>
+      <div class="toy__cta">
+        <a class="btn btn--primary" href="https://the-fisher-slopworks-co.github.io/d10/" target="_blank" rel="noopener" data-magnetic>
+          <span>Open it fullscreen</span>
+          <svg viewBox="0 0 24 24" class="btn__arrow"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a class="btn btn--ghost" href="https://github.com/The-Fisher-Slopworks-Co/d10" target="_blank" rel="noopener">Read the source</a>
+      </div>
+    </div>
+    <figure class="porthole" data-reveal>
+      <div class="porthole__ring">
+        <div class="porthole__glass">
+          <iframe data-iframe title="d10 — roll a ten-sided die" loading="lazy"
+            referrerpolicy="no-referrer"
+            data-src="https://the-fisher-slopworks-co.github.io/d10/"></iframe>
+          <button class="porthole__load" data-iframe-load type="button">
+            <svg viewBox="0 0 100 100" class="porthole__die"><use href="#fish" xlink:href="#fish" /></svg>
+            <span>Tap to load the live d10</span>
+            <small>the-fisher-slopworks-co.github.io/d10</small>
+          </button>
+        </div>
+        <span class="porthole__rivets" aria-hidden="true"></span>
+      </div>
+      <figcaption>Live embed · served from GitHub Pages</figcaption>
+    </figure>
+  </section>
+
+  <!-- ============ manifest marquee ============ -->
+  <div class="ticker" aria-hidden="true" data-ticker>
+    <div class="ticker__row" data-ticker-row>
+      <span>xfleet</span><span class="ticker__sep">✦</span>
+      <span>kaban_ops</span><span class="ticker__sep">✦</span>
+      <span>any_talker</span><span class="ticker__sep">✦</span>
+      <span>co2ppm</span><span class="ticker__sep">✦</span>
+      <span>d10</span><span class="ticker__sep">✦</span>
+      <span>rstlrx</span><span class="ticker__sep">✦</span>
+      <span>lrcgen</span><span class="ticker__sep">✦</span>
+      <span>sptlrx-cc</span><span class="ticker__sep">✦</span>
+      <span>ignore&amp;exclude</span><span class="ticker__sep">✦</span>
+      <span>stamp</span><span class="ticker__sep">✦</span>
+      <span>template</span><span class="ticker__sep">✦</span>
+    </div>
+  </div>
+
+  <!-- ============ the standard ============ -->
+  <section class="standard" id="standard">
+    <div class="band-head" data-reveal>
+      <span class="band-kicker"><span class="band-kicker__no">04</span> The standard</span>
+      <h2 class="band-title">Free software, kept honest.</h2>
+      <p class="band-sub">One bar every repository clears before it ships — checked by machines, not vibes.</p>
+    </div>
+
+    <div class="standard__grid">
+      <article class="seal" data-reveal>
+        <svg class="seal__mark" viewBox="0 0 100 100"><use href="#fish" xlink:href="#fish" /></svg>
+        <h3>AGPL-3.0-or-later</h3>
+        <p>Every project carries the GNU Affero GPL — the explicit
+          <em>or-later</em> grant — declared in the manifest, the README, and the
+          license text itself. Use it, study it, change it, share it.</p>
+      </article>
+      <article class="seal" data-reveal>
+        <svg class="seal__mark" viewBox="0 0 100 100"><use href="#fish" xlink:href="#fish" /></svg>
+        <h3>REUSE-compliant</h3>
+        <p>Every file declares its copyright and license. <code>reuse lint</code>
+          runs in CI on every push and pull request — a red check blocks the merge,
+          so provenance never drifts.</p>
+      </article>
+      <article class="seal" data-reveal>
+        <svg class="seal__mark" viewBox="0 0 100 100"><use href="#fish" xlink:href="#fish" /></svg>
+        <h3>Shared governance</h3>
+        <p>Code of Conduct, security policy, and contribution guide live once in
+          <code>.github</code> and reach every repo automatically. New tools are cut
+          from a single <a href="https://github.com/The-Fisher-Slopworks-Co/template" target="_blank" rel="noopener">template</a>.</p>
+      </article>
+    </div>
+
+    <p class="standard__foot" data-reveal>
+      The whole standard is written down in
+      <a href="https://github.com/The-Fisher-Slopworks-Co/.github/blob/main/COMPLIANCE.md" target="_blank" rel="noopener">COMPLIANCE.md</a>.
+      Even this website follows it —
+      <a href="https://github.com/The-Fisher-Slopworks-Co/The-Fisher-Slopworks-Co.github.io" target="_blank" rel="noopener">it's free software too</a>.
+    </p>
+  </section>
+
+</main>
+
+<!-- ============ footer / ship's manifest ============ -->
+<footer class="manifest" id="contact">
+  <div class="manifest__top">
+    <div class="manifest__brand">
+      <span class="manifest__seal"><svg class="seal-svg"><use href="#fish" xlink:href="#fish" /></svg></span>
+      <p class="manifest__name">The Fisher Slopworks Co</p>
+      <p class="manifest__tag">Small, focused tools and experiments. Built in the open — no trackers, no analytics, nothing that phones home.</p>
+    </div>
+
+    <nav class="manifest__col" aria-label="Catalog">
+      <h3>The haul</h3>
+      <a href="https://github.com/The-Fisher-Slopworks-Co/xfleet" target="_blank" rel="noopener">xfleet</a>
+      <a href="https://github.com/The-Fisher-Slopworks-Co/kaban_ops" target="_blank" rel="noopener">kaban_ops</a>
+      <a href="https://github.com/The-Fisher-Slopworks-Co/any_talker" target="_blank" rel="noopener">any_talker</a>
+      <a href="https://github.com/The-Fisher-Slopworks-Co/d10" target="_blank" rel="noopener">d10</a>
+      <a href="https://github.com/The-Fisher-Slopworks-Co/rstlrx" target="_blank" rel="noopener">rstlrx</a>
+    </nav>
+
+    <nav class="manifest__col" aria-label="More projects">
+      <h3>More tools</h3>
+      <a href="https://github.com/The-Fisher-Slopworks-Co/lrcgen" target="_blank" rel="noopener">lrcgen</a>
+      <a href="https://github.com/The-Fisher-Slopworks-Co/sptlrx-cc" target="_blank" rel="noopener">sptlrx-cc</a>
+      <a href="https://github.com/The-Fisher-Slopworks-Co/ignore-and-exclude" target="_blank" rel="noopener">ignore &amp; exclude</a>
+      <a href="https://github.com/The-Fisher-Slopworks-Co/stamp" target="_blank" rel="noopener">stamp</a>
+      <a href="https://github.com/The-Fisher-Slopworks-Co/template" target="_blank" rel="noopener">template</a>
+    </nav>
+
+    <nav class="manifest__col" aria-label="The org">
+      <h3>The yard</h3>
+      <a href="https://github.com/The-Fisher-Slopworks-Co" target="_blank" rel="noopener">GitHub org ↗</a>
+      <a href="https://github.com/The-Fisher-Slopworks-Co/.github" target="_blank" rel="noopener">Org defaults</a>
+      <a href="https://github.com/The-Fisher-Slopworks-Co/.github/blob/main/COMPLIANCE.md" target="_blank" rel="noopener">Compliance</a>
+      <a href="mailto:security@slopworks.org">security@slopworks.org</a>
+    </nav>
+  </div>
+
+  <div class="manifest__rule" aria-hidden="true"></div>
+
+  <div class="manifest__bottom">
+    <p>© 2026 The Fisher Slopworks Co · <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener">AGPL-3.0-or-later</a></p>
+    <p class="manifest__sign">
+      <span class="manifest__chip">REUSE-compliant</span>
+      <span class="manifest__chip">No trackers</span>
+      <span class="manifest__chip">100% AI-written</span>
+    </p>
+  </div>
+</footer>
+
+<script src="assets/main.js" defer></script>
+</body>
+</html>

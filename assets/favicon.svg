@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SPDX-FileCopyrightText: 2026 The Fisher Slopworks Co -->
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="The Fisher Slopworks Co maker's mark">
+  <circle cx="50" cy="50" r="50" fill="#0b1b2d"/>
+  <circle cx="50" cy="50" r="49" fill="none" stroke="#1d3a52" stroke-width="1"/>
+  <g fill="none" stroke="#eaf1f3" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <!-- body -->
+    <path d="M19,50 C31,31 55,29 71,48"/>
+    <path d="M19,50 C31,69 55,71 71,52"/>
+    <!-- tail -->
+    <path d="M71,48 L89,37 L81,50 L89,63 L71,52"/>
+    <!-- gill -->
+    <path d="M37,37 C33,44 33,56 37,63"/>
+    <!-- the catch: a small fish held within -->
+    <path d="M47,53 C51,48 58,48 62,52 C58,57 51,57 47,53 Z" stroke-width="1.9"/>
+    <path d="M62,52 L67,49 L65,52 L67,55 Z" stroke-width="1.9"/>
+  </g>
+  <circle cx="30" cy="46.5" r="2.4" fill="#eaf1f3"/>
+</svg>
