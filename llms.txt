@@ -1,0 +1,29 @@
+# The Fisher Slopworks Co
+
+> A small free-software foundry. We make small, sharp tools and experiments —
+> all machine-written, shipped in the open under AGPL-3.0-or-later, and
+> REUSE-compliant. This site (slopworks.org) is a single static page that
+> catalogues the org's open-source tools.
+
+Every project below lives in the GitHub organisation
+<https://github.com/The-Fisher-Slopworks-Co> and is free to use, study, or take
+apart. There is no API, no account, and no tracking — just source code.
+
+## Tools
+
+- [xfleet](https://github.com/The-Fisher-Slopworks-Co/xfleet): fleet control for self-hosted VPN.
+- [any_talker](https://github.com/The-Fisher-Slopworks-Co/any_talker): an AI Telegram bot you can watch think.
+- [co2ppm](https://github.com/The-Fisher-Slopworks-Co/co2ppm): breathe-easy air-quality metrics for an ESP32.
+- [d10](https://github.com/The-Fisher-Slopworks-Co/d10): roll one ten-sided die, with real physics — also embedded on the homepage.
+- [rstlrx](https://github.com/The-Fisher-Slopworks-Co/rstlrx): blazingly fast terminal lyrics.
+- [lrcgen](https://github.com/The-Fisher-Slopworks-Co/lrcgen): make LRC lyric files by tapping along.
+- [sptlrx-cc](https://github.com/The-Fisher-Slopworks-Co/sptlrx-cc): karaoke lyrics, rendered inside Minecraft.
+- [ignore & exclude](https://github.com/The-Fisher-Slopworks-Co/ignore-and-exclude): one click to ignore a file (editor extension).
+- [stamp](https://github.com/The-Fisher-Slopworks-Co/stamp): a distinct colour per project window (editor extension).
+- [template](https://github.com/The-Fisher-Slopworks-Co/template): the project template every repo starts from.
+
+## Standard
+
+- [License — AGPL-3.0-or-later](https://slopworks.org/LICENSE): every project, and this website, is AGPL and REUSE-compliant.
+- [Compliance notes](https://github.com/The-Fisher-Slopworks-Co/.github/blob/main/COMPLIANCE.md): how the org keeps its free-software standard.
+- [Website source](https://github.com/The-Fisher-Slopworks-Co/The-Fisher-Slopworks-Co.github.io): this page's repository.

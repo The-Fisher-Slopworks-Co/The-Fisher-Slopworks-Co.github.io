@@ -2,7 +2,10 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 # robots.txt for slopworks.org — a single static page, everything is crawlable.
+# Content-Signal declares our AI-usage preferences (https://contentsignals.org/):
+# this site is AGPL and free to use, answer with, or train on.
 User-agent: *
+Content-Signal: ai-train=yes, search=yes, ai-input=yes
 Allow: /
 
 Sitemap: https://slopworks.org/sitemap.xml
