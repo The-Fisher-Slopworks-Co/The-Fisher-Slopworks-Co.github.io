@@ -1,67 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- SPDX-FileCopyrightText: 2026 The Fisher Slopworks Co -->
 <!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
+<!--
+  Social card, cut from the same instrument panel as the page: flat ink, hairline
+  rules, one signal colour, monospace on every value. No gradient, no glow.
+
+  Archivo and IBM Plex Mono lead each font stack so a machine that has them
+  renders the real thing; the Liberation / Noto / DejaVu fallbacks behind them
+  are what actually rasterises og.png here.
+
+  Nothing on this card counts anything. Repository and language totals belong on
+  the page, where catalog-sync refreshes them; a social card is cached by every
+  platform that scrapes it, so a number baked in here goes stale somewhere we
+  cannot reach to correct it.
+-->
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
-  <defs>
-    <radialGradient id="bg" cx="32%" cy="18%" r="110%">
-      <stop offset="0%" stop-color="#11304a"/>
-      <stop offset="45%" stop-color="#0a1a2b"/>
-      <stop offset="100%" stop-color="#050d17"/>
-    </radialGradient>
-    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#46e5c4" stop-opacity="0.45"/>
-      <stop offset="100%" stop-color="#46e5c4" stop-opacity="0"/>
-    </radialGradient>
-    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
-      <path d="M48 0H0V48" fill="none" stroke="#e9f0f1" stroke-opacity="0.05" stroke-width="1"/>
-    </pattern>
-    <filter id="soft" x="-40%" y="-40%" width="180%" height="180%">
-      <feGaussianBlur stdDeviation="6"/>
-    </filter>
-  </defs>
 
-  <rect width="1200" height="630" fill="url(#bg)"/>
-  <rect width="1200" height="630" fill="url(#grid)"/>
-  <rect x="14" y="14" width="1172" height="602" rx="18" fill="none" stroke="#e9f0f1" stroke-opacity="0.12"/>
+  <rect width="1200" height="630" fill="#071522"/>
 
-  <!-- seal -->
-  <g transform="translate(915 315)">
-    <circle r="210" fill="url(#glow)"/>
-    <circle r="150" fill="#081523" stroke="#1d3a52" stroke-width="2"/>
-    <circle r="139" fill="none" stroke="#e9f0f1" stroke-opacity="0.08" stroke-width="1"/>
-    <g transform="translate(-150 -150) scale(3)">
-      <g fill="none" stroke="#46e5c4" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" filter="url(#soft)" stroke-opacity="0.7">
-        <path d="M19,50 C31,31 55,29 71,48"/>
-        <path d="M19,50 C31,69 55,71 71,52"/>
-        <path d="M71,48 L89,37 L81,50 L89,63 L71,52"/>
-      </g>
-      <g fill="none" stroke="#6df0d6" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M19,50 C31,31 55,29 71,48"/>
-        <path d="M19,50 C31,69 55,71 71,52"/>
-        <path d="M71,48 L89,37 L81,50 L89,63 L71,52"/>
-        <path d="M37,35.9 C33,44 33,56 37,64.1"/>
-        <g transform="translate(-4,4)">
-          <path d="M47,53 C51,48 58,48 62,52 C58,57 51,57 47,53 Z" stroke-width="1.9"/>
-          <path d="M62,52 L67,49 L65,52 L67,55 Z" stroke-width="1.9" fill="#6df0d6"/>
-        </g>
-      </g>
-      <circle cx="30" cy="46.5" r="2.4" fill="#6df0d6"/>
+  <!-- ============ bar ============ -->
+  <circle cx="93" cy="43" r="21" fill="#0a1a2b" stroke="#21394d"/>
+  <g transform="translate(78,28) scale(0.30)" fill="none" stroke="#e7eef1"
+     stroke-width="6.4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M19,50 C31,31 55,29 71,48"/>
+    <path d="M19,50 C31,69 55,71 71,52"/>
+    <path d="M71,48 L89,37 L81,50 L89,63 L71,52"/>
+    <path d="M37,35.9 C33,44 33,56 37,64.1"/>
+  </g>
+  <text x="130" y="51" font-family="'IBM Plex Mono','Noto Sans Mono','DejaVu Sans Mono',monospace"
+        font-size="21" font-weight="500" letter-spacing="2.1" fill="#e7eef1">FISHER SLOPWORKS <tspan fill="#6f8698">CO.</tspan></text>
+  <path d="M0,86.5 H1200" stroke="#16293a"/>
+
+  <!-- ============ section marker, exactly as the page sets it ============ -->
+  <text x="72" y="196" font-family="'IBM Plex Mono','Noto Sans Mono','DejaVu Sans Mono',monospace"
+        font-size="17" font-weight="500" letter-spacing="3.4" fill="#6f8698">EST. 2026 / A FREE-SOFTWARE FOUNDRY</text>
+  <path d="M578,190.5 H860" stroke="#16293a"/>
+
+  <!-- ============ headline ============ -->
+  <g font-family="Archivo,'Liberation Sans','Noto Sans','DejaVu Sans',sans-serif"
+     font-size="74" font-weight="600" letter-spacing="-1.8" fill="#e7eef1">
+    <text x="72" y="308">Small, sharp tools.</text>
+    <text x="72" y="394">We let them <tspan fill="#46e5c4">swim.</tspan></text>
+  </g>
+  <text x="72" y="456" font-family="Archivo,'Liberation Sans','Noto Sans','DejaVu Sans',sans-serif"
+        font-size="26" fill="#92a6b5">Free software, written by machine, shipped in the open.</text>
+
+  <!-- ============ maker's mark ============ -->
+  <circle cx="1016" cy="320" r="112" fill="#0a1a2b" stroke="#21394d"/>
+  <g transform="translate(897.2,210) scale(2.2)" fill="none" stroke="#e7eef1"
+     stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M19,50 C31,31 55,29 71,48"/>
+    <path d="M19,50 C31,69 55,71 71,52"/>
+    <path d="M71,48 L89,37 L81,50 L89,63 L71,52"/>
+    <path d="M37,35.9 C33,44 33,56 37,64.1"/>
+    <!-- the catch: a small fish held within -->
+    <g transform="translate(-4,4)" stroke-width="1.9">
+      <path d="M47,53 C51,48 58,48 62,52 C58,57 51,57 47,53 Z"/>
+      <path d="M62,52 L67,49 L65,52 L67,55 Z" fill="#e7eef1"/>
     </g>
+    <circle cx="30" cy="46.5" r="2.4" fill="#e7eef1" stroke="none"/>
   </g>
 
-  <!-- text -->
-  <g font-family="'DejaVu Sans Mono','IBM Plex Mono',monospace">
-    <text x="80" y="150" fill="#93a8b8" font-size="22" letter-spacing="6">EST. 2026 &#183; A FREE-SOFTWARE FOUNDRY</text>
-  </g>
-  <g font-family="Georgia,'DejaVu Serif',serif" fill="#e9f0f1">
-    <text x="76" y="270" font-size="104" font-weight="600" letter-spacing="-2">The Fisher</text>
-    <text x="76" y="378" font-size="104" font-weight="600" letter-spacing="-2">Slopworks <tspan fill="#6df0d6" font-style="italic">Co.</tspan></text>
-  </g>
-  <rect x="80" y="420" width="120" height="4" rx="2" fill="#46e5c4"/>
-  <g font-family="'DejaVu Sans','Archivo',sans-serif" fill="#93a8b8">
-    <text x="80" y="478" font-size="30">Small, sharp tools and experiments &#8212; built in the open.</text>
-  </g>
-  <g font-family="'DejaVu Sans Mono','IBM Plex Mono',monospace" fill="#62798c">
-    <text x="80" y="566" font-size="22" letter-spacing="2">slopworks.org &#160;&#183;&#160; AGPL-3.0-or-later &#160;&#183;&#160; REUSE-compliant</text>
-  </g>
+  <!-- ============ credit line ============ -->
+  <path d="M72,554.5 H1128" stroke="#16293a"/>
+  <text x="72" y="592" font-family="'IBM Plex Mono','Noto Sans Mono','DejaVu Sans Mono',monospace"
+        font-size="19" letter-spacing="1.5" fill="#6f8698">slopworks.org &#160;&#183;&#160; AGPL-3.0-or-later &#160;&#183;&#160; REUSE-compliant</text>
 </svg>
