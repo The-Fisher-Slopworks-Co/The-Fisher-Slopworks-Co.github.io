@@ -2,18 +2,19 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-# Keep the GitHub Actions used by the deploy + REUSE workflows current.
-# (The site itself has no package dependencies to track.)
+# The site has no package dependencies, so only the GitHub Actions used by the
+# workflows are tracked.
 version: 2
+
 updates:
-  - package-ecosystem: "github-actions"
-    directory: "/"
+  - package-ecosystem: github-actions
+    directory: /
     schedule:
-      interval: "weekly"
-      day: "monday"
+      interval: weekly
+    cooldown:
+      default-days: 7
     commit-message:
-      prefix: "ci"
+      prefix: chore(deps)
     groups:
       actions:
-        patterns:
-          - "*"
+        update-types: [minor, patch]
