@@ -1,0 +1,25 @@
+# SPDX-FileCopyrightText: 2026 The Fisher Slopworks Co
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+# Labels every PR size:XS…size:XXL by effective lines changed, via the org's
+# reusable workflow. It never checks out PR code, which is what makes
+# pull_request_target safe here.
+name: PR size
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+concurrency:
+  group: pr-size-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  pr-size:
+    uses: The-Fisher-Slopworks-Co/.github/.github/workflows/pr-size.yml@main
